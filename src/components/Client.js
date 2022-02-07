@@ -165,7 +165,7 @@ const Client = () => {
           <ICMessages websocket={server.current} />
         </>
       ) : (
-        <h1>You were disconnected, cunt</h1>
+        <h1>You were disconnected</h1>
       )}
     </div>
   );
