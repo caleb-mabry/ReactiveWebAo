@@ -1,14 +1,14 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import './App.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./App.css";
 
-import { Provider } from 'react-redux'
-import store from './store'
+import { Provider } from "react-redux";
+import store from "./store";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import MasterServer from './components/MasterServer'
-import Client from './components/Client';
-const rootElement = document.getElementById('root')
+import MasterServer from "./components/MasterServer";
+import Client from "./components/Client";
+const rootElement = document.getElementById("root");
 ReactDOM.render(
   <BrowserRouter>
     <Provider store={store}>
@@ -20,4 +20,4 @@ ReactDOM.render(
     </Provider>
   </BrowserRouter>,
   rootElement
-)
+);

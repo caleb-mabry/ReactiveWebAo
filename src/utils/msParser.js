@@ -1,8 +1,8 @@
-const msParser = msg => {
-    const data = msg.split('#')
-    data.shift()
-    data.pop()
-    return ({
+const msParser = (msg) => {
+  const data = msg.split("#");
+  data.shift();
+  data.pop();
+  return {
     desk_mod: data[0],
     preanim: data[1],
     character: data[2],
@@ -28,8 +28,7 @@ const msParser = msg => {
     framesRealization: data[22],
     framesSfx: data[23],
     additive: data[24],
-    effect: data[26]
-
-    })
-}
-export default msParser
+    effect: data[26],
+  };
+};
+export default msParser;

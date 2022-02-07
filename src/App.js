@@ -1,6 +1,6 @@
-import logo from './logo.svg';
-import './App.css';
-import MasterServer from './components/MasterServer';
+import logo from "./logo.svg";
+import "./App.css";
+import MasterServer from "./components/MasterServer";
 function App() {
   return (
     <div className="App">
