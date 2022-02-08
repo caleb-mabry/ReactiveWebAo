@@ -1,14 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import axios from "axios";
-
 import {
   setCharacterId,
   setEmotes,
   setOptions,
 } from "../features/masterserver/clientserver";
 import { useEffect } from "react";
-const ini = require("ini");
+import parse from "../utils/webIni";
+import parseEmotions from "../utils/parseEmotions";
+
 const AvailableCharacter = styled.img`
   pointer: click;
 `;
@@ -35,6 +36,7 @@ const Characters = ({ websocket }) => {
   const dispatch = useDispatch();
 
   const getEmotes = (characterName) => {
+      
     axios
       .get(
         assetUrl +
@@ -43,10 +45,11 @@ const Characters = ({ websocket }) => {
           "/char.ini"
       )
       .then((data) => {
-        const cini = ini.parse(data.data);
-        delete cini.Emotions.number;
-        dispatch(setOptions(cini.Options));
-        dispatch(setEmotes(cini.Emotions));
+        const cini = parse(data.data);
+        delete cini.emotions.number
+        const emotions = Object.keys(cini.emotions).map((key) => parseEmotions(String(cini.emotions[key])))
+        dispatch(setOptions(cini.options));
+        dispatch(setEmotes(emotions));
       });
   };
   return (

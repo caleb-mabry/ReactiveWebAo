@@ -157,12 +157,13 @@ const Client = () => {
           <Display />
           <ChangeArea websocket={server.current} />
           <Emotes />
+          <ICMessages websocket={server.current} />
+
           <Characters websocket={server.current} />
           <div>OOC Messages</div>
           <OOCMessages />
           <hr></hr>
           <div>Messages</div>
-          <ICMessages websocket={server.current} />
         </>
       ) : (
         <h1>You were disconnected</h1>

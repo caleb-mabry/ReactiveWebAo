@@ -6,6 +6,7 @@ export const clientServer = createSlice({
     assetUrl: "http://attorneyoffline.de/base/",
     characterId: -1,
     background: "",
+    selectedEmote: 'normal',
     emotions: [],
     options: [],
     areas: [],
@@ -18,6 +19,9 @@ export const clientServer = createSlice({
   reducers: {
     setEmotes: (state, action) => {
       state.emotions = action.payload;
+    },
+    setSelectedEmote: (state, action) => {
+      state.selectedEmote = action.payload
     },
     setOptions: (state, action) => {
       state.options = action.payload;
@@ -94,6 +98,7 @@ export const {
   setAreaNames,
   setClient,
   setCharacterId,
+  setSelectedEmote
 } = clientServer.actions;
 
 export default clientServer.reducer;
