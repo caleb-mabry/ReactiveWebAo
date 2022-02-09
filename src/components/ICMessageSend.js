@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Input, Button } from '@mui/material';
 
 const ICMessageSend = ({ websocket }) => {
   const [message, setMessage] = useState("");
@@ -23,10 +24,10 @@ const ICMessageSend = ({ websocket }) => {
         <h1>Loading!</h1>
       ) : (
         <div>
-          <input type={"text"} onChange={(ev) => setMessage(ev.target.value)} />
-          <button onClick={() => websocket.send(icMessageBuilder())}>
-            Submit
-          </button>
+          <Input
+          placeholder="In Character Message..."
+           onChange={ev => setMessage(ev.target.value)} />
+          <Button onClick={() => websocket.send(icMessageBuilder())}>Submit</Button>
         </div>
       )}
     </>

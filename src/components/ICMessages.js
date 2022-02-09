@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import ICMessageSend from "./ICMessageSend";
 
-const ICMessages = ({ websocket }) => {
+const ICMessages = () => {
   const icMessages = useSelector((state) => state.client.messages);
   return (
     <>
@@ -11,7 +10,6 @@ const ICMessages = ({ websocket }) => {
           {ic.character}: {ic.message}
         </li>
       ))}
-      <ICMessageSend websocket={websocket} />
     </>
   );
 };

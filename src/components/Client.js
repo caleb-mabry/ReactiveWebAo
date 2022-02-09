@@ -11,6 +11,8 @@ import {
   setBackground,
   setCharacterAvailablility,
   setClient,
+  setSong,
+  setSongs,
   setTimers,
 } from "../features/masterserver/clientserver";
 import { getArupInformationCode, arupParser0 } from "../utils/arupParser";
@@ -29,6 +31,11 @@ import Display from "./Display";
 import Emotes from "./Emotes";
 import ICMessages from "./ICMessages";
 import OOCMessages from "./OOCMessages";
+import ICMessageSend from "./ICMessageSend"
+import Songs from "./Songs";
+import Audio from "./Audio"
+import mcParser from "../utils/mcParser";
+
 const Client = () => {
   const { ip } = useParams();
   const dispatch = useDispatch();
@@ -41,6 +48,7 @@ const Client = () => {
     server.current = new WebSocket(`ws://${ip}`);
     server.current.onmessage = (ev) => onMessageHandler(ev.data);
     server.current.onclose = (ev) => {
+      console.error(ev)
       setConnected(false);
     };
     server.current.onopen = (ev) => {
@@ -122,10 +130,16 @@ const Client = () => {
     const flHandler = (msg) => {
       console.log(msg);
     };
-    const decryptorHandler = () => {};
+    const mcHandler = (msg) => {
+      console.log(msg)
+      const parsedMc = mcParser(msg)
+      dispatch(setSong(parsedMc.songName))
+    }
+    // const decryptorHandler = () => {};
     const smHandler = (msg) => {
       const smParsed = smParser(msg);
       dispatch(setAreaNames(smParsed.areas));
+      dispatch(setSongs(smParsed.songs))
     };
     const bnHandler = (msg) => {
       const backgroundName = bnParser(msg);
@@ -139,12 +153,12 @@ const Client = () => {
       FL: flHandler,
       SC: scHandler,
       CT: ctHandler,
+      MC: mcHandler,
       SM: smHandler,
       BN: bnHandler,
       CharsCheck: charsCheckHandler,
       ID: idHandler,
       PN: pnHandler,
-      decryptor: decryptorHandler,
     };
     return () => server.current.close();
   }, []);
@@ -154,16 +168,20 @@ const Client = () => {
       {connected ? (
         <>
           <Areas />
+          <Audio />
           <Display />
-          <ChangeArea websocket={server.current} />
           <Emotes />
-          <ICMessages websocket={server.current} />
+          
+          <ICMessageSend websocket={server.current} />
+
+          <ChangeArea websocket={server.current} />
+          <Songs websocket={server.current}/>
+          <ICMessages />
+
 
           <Characters websocket={server.current} />
           <div>OOC Messages</div>
           <OOCMessages />
-          <hr></hr>
-          <div>Messages</div>
         </>
       ) : (
         <h1>You were disconnected</h1>

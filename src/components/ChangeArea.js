@@ -1,3 +1,4 @@
+import { Autocomplete, TextField } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -7,8 +8,9 @@ const sendChangeAreaRequest = (websocket, area, characterId) => {
 
 const ChangeArea = ({ websocket }) => {
   const areas = useSelector((state) => state.client.areas);
+  const areasOptions = areas.map((area) => area.name)
   const characterId = useSelector((state) => state.client.characterId);
-  const [selectedArea, setSelectedArea] = useState(0);
+  const [selectedArea, setSelectedArea] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,7 +22,21 @@ const ChangeArea = ({ websocket }) => {
         <h1>Loading</h1>
       ) : (
         <div>
-          <select
+            
+            <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={areasOptions}
+            sx={{ width: 300 }}
+            value={selectedArea}
+            renderInput={(params) => <TextField {...params} label="Area" />}
+            onChange={(ev, changeValue) => {
+              setSelectedArea(changeValue);
+              sendChangeAreaRequest(websocket, changeValue, characterId)
+            }}
+            />
+
+          {/* <select
             value={selectedArea}
             onChange={(ev) => setSelectedArea(ev.target.value)}
           >
@@ -36,7 +52,7 @@ const ChangeArea = ({ websocket }) => {
             }
           >
             Change Area
-          </button>
+          </button> */}
         </div>
       )}
     </div>
