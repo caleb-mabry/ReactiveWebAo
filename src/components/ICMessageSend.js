@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Input, Button } from '@mui/material';
+import { Input, Button, TextField } from '@mui/material';
 
 const ICMessageSend = ({ websocket }) => {
   const [message, setMessage] = useState("");
@@ -24,10 +24,18 @@ const ICMessageSend = ({ websocket }) => {
         <h1>Loading!</h1>
       ) : (
         <div>
-          <Input
-          placeholder="In Character Message..."
-           onChange={ev => setMessage(ev.target.value)} />
-          <Button onClick={() => websocket.send(icMessageBuilder())}>Submit</Button>
+          {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" /> */}
+
+          <TextField
+          label="Message"
+          varian="outlined"
+          value={message}
+          onKeyDown={(ev) => {
+            if(ev.keyCode === 13) {
+              websocket.send(icMessageBuilder());
+              setMessage('')}
+          }}
+           onChange={ev=>setMessage(ev.target.value)} />
         </div>
       )}
     </>

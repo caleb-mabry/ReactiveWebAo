@@ -57,7 +57,7 @@ return(
           dispatch(setSelectedEmote(ev.target.value))
           }}
         >
-          {emotes.map((emote) => { return (<MenuItem key={emote} value={emote}>{emote}</MenuItem>) })}
+          {emotes.map((emote, indx) => { return (<MenuItem key={emote} value={emote}><img src={getEmoteImageUrl(indx)} /></MenuItem>) })}
         </Select>
       </FormControl>
       
