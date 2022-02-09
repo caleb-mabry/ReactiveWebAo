@@ -12,11 +12,11 @@ const smParser = (msg) => {
       i += 1;
     }
   }
-  const songs = data.slice(startMusicIndex)
+  const songs = data.slice(startMusicIndex);
   for (let i = 0; i < startMusicIndex; i++) {
     areas.push(data[i]);
   }
-  
+
   // for (let musicIndexStart = startMusicIndex; startMusicIndex < data.length; musicIndexStart++) {
   //     songs.push(data[musicIndexStart])
   // }

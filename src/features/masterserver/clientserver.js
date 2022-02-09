@@ -6,8 +6,9 @@ export const clientServer = createSlice({
     assetUrl: "http://attorneyoffline.de/base/",
     characterId: -1,
     background: "",
-    song: '',
-    selectedEmote: 'normal',
+    song: "",
+    selectedEmote: "",
+    area: "",
     emotions: [],
     options: [],
     areas: [],
@@ -19,17 +20,20 @@ export const clientServer = createSlice({
     songs: [],
   },
   reducers: {
+    setArea: (state, action) => {
+      state.area = action.payload;
+    },
     setSong: (state, action) => {
-      state.song = action.payload
+      state.song = action.payload;
     },
     setSongs: (state, action) => {
-      state.songs = action.payload
+      state.songs = action.payload;
     },
     setEmotes: (state, action) => {
       state.emotions = action.payload;
     },
     setSelectedEmote: (state, action) => {
-      state.selectedEmote = action.payload
+      state.selectedEmote = action.payload;
     },
     setOptions: (state, action) => {
       state.options = action.payload;
@@ -93,6 +97,7 @@ export const clientServer = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
+  setArea,
   setSong,
   setSongs,
   setEmotes,
@@ -108,7 +113,7 @@ export const {
   setAreaNames,
   setClient,
   setCharacterId,
-  setSelectedEmote
+  setSelectedEmote,
 } = clientServer.actions;
 
 export default clientServer.reducer;

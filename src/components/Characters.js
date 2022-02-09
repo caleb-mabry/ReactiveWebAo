@@ -5,6 +5,7 @@ import {
   setCharacterId,
   setEmotes,
   setOptions,
+  setSelectedEmote,
 } from "../features/masterserver/clientserver";
 import { useEffect } from "react";
 import parse from "../utils/webIni";
@@ -36,7 +37,6 @@ const Characters = ({ websocket }) => {
   const dispatch = useDispatch();
 
   const getEmotes = (characterName) => {
-      
     axios
       .get(
         assetUrl +
@@ -46,10 +46,13 @@ const Characters = ({ websocket }) => {
       )
       .then((data) => {
         const cini = parse(data.data);
-        delete cini.emotions.number
-        const emotions = Object.keys(cini.emotions).map((key) => parseEmotions(String(cini.emotions[key])))
+        delete cini.emotions.number;
+        const emotions = Object.keys(cini.emotions).map((key) =>
+          parseEmotions(String(cini.emotions[key]))
+        );
         dispatch(setOptions(cini.options));
         dispatch(setEmotes(emotions));
+        dispatch(setSelectedEmote(emotions[0]));
       });
   };
   return (

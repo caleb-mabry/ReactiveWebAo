@@ -1,6 +1,7 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setArea } from "../features/masterserver/clientserver";
 
 const sendChangeAreaRequest = (websocket, area, characterId) => {
   websocket.send(`MC#${area}#${characterId}#%`);
@@ -8,10 +9,11 @@ const sendChangeAreaRequest = (websocket, area, characterId) => {
 
 const ChangeArea = ({ websocket }) => {
   const areas = useSelector((state) => state.client.areas);
-  const areasOptions = areas.map((area) => area.name)
+  const areasOptions = areas.map((area) => area.name);
+  const area = useSelector((state) => state.client.area);
   const characterId = useSelector((state) => state.client.characterId);
-  const [selectedArea, setSelectedArea] = useState('');
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     websocket ? setLoading(false) : setLoading(true);
@@ -22,19 +24,18 @@ const ChangeArea = ({ websocket }) => {
         <h1>Loading</h1>
       ) : (
         <div>
-            
-            <Autocomplete
+          <Autocomplete
             disablePortal
             id="combo-box-demo"
             options={areasOptions}
             sx={{ width: 300 }}
-            value={selectedArea}
+            value={area}
             renderInput={(params) => <TextField {...params} label="Area" />}
             onChange={(ev, changeValue) => {
-              setSelectedArea(changeValue);
-              sendChangeAreaRequest(websocket, changeValue, characterId)
+              dispatch(setArea(changeValue));
+              sendChangeAreaRequest(websocket, changeValue, characterId);
             }}
-            />
+          />
 
           {/* <select
             value={selectedArea}

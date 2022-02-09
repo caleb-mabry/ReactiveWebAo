@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Input, Button, TextField } from '@mui/material';
+import { Input, Button, TextField } from "@mui/material";
 
 const ICMessageSend = ({ websocket }) => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const characters = useSelector((state) => state.client.characters);
   const characterId = useSelector((state) => state.client.characterId);
-  const selectedEmote = useSelector(state => state.client.selectedEmote)
+  const selectedEmote = useSelector((state) => state.client.selectedEmote);
   useEffect(() => {
     websocket ? setLoading(false) : setLoading(true);
   });
@@ -27,15 +27,17 @@ const ICMessageSend = ({ websocket }) => {
           {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" /> */}
 
           <TextField
-          label="Message"
-          varian="outlined"
-          value={message}
-          onKeyDown={(ev) => {
-            if(ev.keyCode === 13) {
-              websocket.send(icMessageBuilder());
-              setMessage('')}
-          }}
-           onChange={ev=>setMessage(ev.target.value)} />
+            label="Message"
+            varian="outlined"
+            value={message}
+            onKeyDown={(ev) => {
+              if (ev.keyCode === 13) {
+                websocket.send(icMessageBuilder());
+                setMessage("");
+              }
+            }}
+            onChange={(ev) => setMessage(ev.target.value)}
+          />
         </div>
       )}
     </>

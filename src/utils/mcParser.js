@@ -2,7 +2,6 @@ const mcParser = (msg) => {
   const data = msg.split("#");
   data.shift();
   data.pop();
-  console.log(data)
   return {
     songName: data[0],
     charId: data[1],
@@ -13,4 +12,4 @@ const mcParser = (msg) => {
   };
 };
 
-export default mcParser
+export default mcParser;

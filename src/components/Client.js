@@ -2,6 +2,7 @@ import { createRef, forwardRef, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
+  setArea,
   addCharacter,
   addMessage,
   addOocMessage,
@@ -31,25 +32,35 @@ import Display from "./Display";
 import Emotes from "./Emotes";
 import ICMessages from "./ICMessages";
 import OOCMessages from "./OOCMessages";
-import ICMessageSend from "./ICMessageSend"
+import ICMessageSend from "./ICMessageSend";
 import Songs from "./Songs";
-import Audio from "./Audio"
+import Audio from "./Audio";
 import mcParser from "../utils/mcParser";
+import Backgrounds from "./Backgrounds";
 
 const Client = () => {
   const { ip } = useParams();
   const dispatch = useDispatch();
+  const area = useSelector((state) => state.client.area);
+  const song = useSelector((state) => state.client.song);
   const characters = useSelector((state) => state.client.characters);
   const [websocket, setWebsocket] = useState();
   const [connected, setConnected] = useState(false);
   const server = useRef(null);
 
-  useEffect(() => {
+  const createServer = () => {
     server.current = new WebSocket(`ws://${ip}`);
+    setConnected(true);
     server.current.onmessage = (ev) => onMessageHandler(ev.data);
     server.current.onclose = (ev) => {
-      console.error(ev)
-      setConnected(false);
+      console.error(ev);
+      try {
+        console.log("Attempting to reconnect");
+        setTimeout(createServer, 1000);
+      } catch (er) {
+        console.error(er.stack);
+        setConnected(false);
+      }
     };
     server.current.onopen = (ev) => {
       const hdid = Math.random();
@@ -131,15 +142,21 @@ const Client = () => {
       console.log(msg);
     };
     const mcHandler = (msg) => {
-      console.log(msg)
-      const parsedMc = mcParser(msg)
-      dispatch(setSong(parsedMc.songName))
-    }
+      console.log(msg);
+      const parsedMc = mcParser(msg);
+      dispatch(setSong(parsedMc.songName));
+    };
     // const decryptorHandler = () => {};
     const smHandler = (msg) => {
       const smParsed = smParser(msg);
       dispatch(setAreaNames(smParsed.areas));
-      dispatch(setSongs(smParsed.songs))
+      dispatch(setSongs(smParsed.songs));
+      if (song === "") {
+        dispatch(setSong(smParsed.songs[0]));
+      }
+      if (area === "") {
+        dispatch(setArea(smParsed.areas[0]));
+      }
     };
     const bnHandler = (msg) => {
       const backgroundName = bnParser(msg);
@@ -160,6 +177,10 @@ const Client = () => {
       ID: idHandler,
       PN: pnHandler,
     };
+  };
+
+  useEffect(() => {
+    createServer();
     return () => server.current.close();
   }, []);
 
@@ -170,14 +191,21 @@ const Client = () => {
           <Areas />
           <Audio />
           <Display />
+          <br></br>
           <Emotes />
-          
+          <br></br>
+
           <ICMessageSend websocket={server.current} />
+          <br></br>
 
           <ChangeArea websocket={server.current} />
-          <Songs websocket={server.current}/>
-          <ICMessages />
+          <br></br>
 
+          <Songs websocket={server.current} />
+          <br></br>
+          <Backgrounds />
+
+          <ICMessages />
 
           <Characters websocket={server.current} />
           <div>OOC Messages</div>
